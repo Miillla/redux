@@ -3,19 +3,18 @@ import { selectAllPosts, getPostsStatus, getPostsError } from "./postsSlice";
 import PostsExcerpt from "./PostsExcerpt";
 
 const PostsList = () => {
-  const posts = useSelector(selectAllPosts);
+  const orderedPostIds = useSelector(selectAllPosts);
   const postStatus = useSelector(getPostsStatus);
   const error = useSelector(getPostsError);
+
+  console.log(orderedPostIds);
 
   let content;
   if (postStatus === "loading") {
     content = <p>"Loading..."</p>;
   } else if (postStatus === "succeeded") {
-    const orderedPosts = posts
-      .slice()
-      .sort((a, b) => b.date.localeCompare(a.date));
-    content = orderedPosts.map((post) => (
-      <PostsExcerpt key={post.id} post={post} />
+    content = orderedPostIds.map((post) => (
+      <PostsExcerpt key={post.id} postId={post.id} />
     ));
   } else if (postStatus === "failed") {
     content = <div>{error}</div>;
